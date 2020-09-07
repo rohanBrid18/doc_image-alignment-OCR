@@ -24,3 +24,17 @@ def align_images(image, template, maxFeatures=500, keepPercent=0.2, debug=False)
         matchedVis = imutils.resize(matchedVis, width=1000)
         cv2.imshow("Matched Keypoints", matchedVis)
         cv2.waitKey(0)
+    
+    ptsA = np.zeros((len(matches), 2), dtype=float)
+    ptsB = np.zeros((len(matches), 2), dtype=float)
+
+    for (i, m) in enumerate(matches):
+        ptsA[i] = kpsA[m.queryIdx].pt
+        ptsB[i] = kpsB[m.trainIdx].pt
+    
+    (H, mask) = cv2.findHomography(ptsA, ptsB, method=cv2.RANSAC)
+
+    (h, w) = template.shape[:2]
+    aligned = cv2.warpPerspective(image, H, (w, h))
+
+    return aligned
