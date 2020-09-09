@@ -5,6 +5,9 @@ import argparse
 import imutils
 import cv2
 
+def cleanup_text(text):
+    return "".join([c if ord(c) < 128 else "" for c in text]).strip()
+
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--image", required=True,
     help="path to input image that we'll assign to template")
@@ -16,7 +19,7 @@ OCRLocation = namedtuple("OCRLocation", ["id", "bbox", "filter_keywords"])
 
 OCR_Locations = [
     OCRLocation("step1_first_name", (58, 49, 150, 20),   #(265, 237, 751, 106)
-        []),
+        ["first", "middle", "initial", "name"]),
     # OCRLocation("step1_last_name", (1020, 237, 835, 106),
 	# 	["last", "name"]),
 	# OCRLocation("step1_address", (265, 336, 1588, 106),
@@ -85,10 +88,11 @@ for (locID, result) in results.items():
     print("{}\n\n".format(text))
 
     (x, y, w, h) = loc["bbox"]
+    clean = cleanup_text(text)
 
     cv2.rectangle(aligned, (x, y), (x+w, y+h), (0, 255, 0), 2)
 
-    for (i, line) in enumerate(text.split("\n")):
+    for (i, line) in enumerate(clean.split("\n")):
         startY = y + (i * 70) + 40
         cv2.putText(aligned, line, (x, startY), cv2.FONT_HERSHEY_SIMPLEX, 1.8, (0, 0, 255), 5)
 
