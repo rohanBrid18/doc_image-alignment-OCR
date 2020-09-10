@@ -18,23 +18,22 @@ args = vars(ap.parse_args())
 OCRLocation = namedtuple("OCRLocation", ["id", "bbox", "filter_keywords"])
 
 OCR_Locations = [
-    OCRLocation("step1_first_name", (58, 49, 150, 20),   #(265, 237, 751, 106)
+    OCRLocation("first_name", (58, 48, 150, 20),                # (265, 237, 751, 106)
         ["first", "middle", "initial", "name"]),
-    # OCRLocation("step1_last_name", (1020, 237, 835, 106),
-	# 	["last", "name"]),
-	# OCRLocation("step1_address", (265, 336, 1588, 106),
-	# 	["address"]),
-	# OCRLocation("step1_city_state_zip", (265, 436, 1588, 106),
-	# 	["city", "zip", "town", "state"]),
-	# OCRLocation("step5_employee_signature", (319, 2516, 1487, 156),
-	# 	["employee", "signature", "form", "valid", "unless",
-	# 	 	"you", "sign"]),
-	# OCRLocation("step5_date", (1804, 2516, 504, 156),
-    #     ["date"]),
-	# OCRLocation("employee_name_address", (265, 2706, 1224, 180),
-	# 	["employer", "name", "address"]),
-	# OCRLocation("employee_ein", (1831, 2706, 448, 180),
-	# 	["employer", "identification", "number", "ein"]),
+    OCRLocation("last_name", (208, 48, 170, 20),                # (1020, 237, 835, 106)
+		["last", "name"]),
+	OCRLocation("address", (58, 68, 320, 20),                   # (265, 336, 1588, 106),
+		["address"]),
+	OCRLocation("city_state_zip", (58, 88, 320, 20),            # (265, 436, 1588, 106),
+		["city", "zip", "town", "state"]),
+	OCRLocation("employee_signature", (68, 503, 298, 33),       # (319, 2516, 1487, 156),
+		["employee", "signature", "form", "valid", "unless", "you", "sign"]),
+	OCRLocation("date", (366, 503, 96, 33),                     # (1804, 2516, 504, 156),
+        ["date"]),
+	OCRLocation("employee_name_address", (58, 542, 244, 37),    # (265, 2706, 1224, 180),
+		["employer", "name", "address"]),
+	OCRLocation("employee_ein", (371, 542, 92, 38),             # (1831, 2706, 448, 180),
+		["employer", "identification", "number", "ein"]),
 ]
 
 print("[Info] loading images...")
@@ -96,6 +95,6 @@ for (locID, result) in results.items():
         startY = y + (i * 70) + 40
         cv2.putText(aligned, line, (x, startY), cv2.FONT_HERSHEY_SIMPLEX, 1.8, (0, 0, 255), 5)
 
-cv2.imshow("Input", imutils.resize(image, width=700))
-cv2.imshow("Output", imutils.resize(aligned, width=700))
+cv2.imshow("Input", imutils.resize(image))
+cv2.imshow("Output", imutils.resize(aligned))
 cv2.waitKey(0)
